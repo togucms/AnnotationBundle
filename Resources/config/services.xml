@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="togu.annotation.metadata.annotation_driver.class">Togu\AnnotationBundle\Metadata\Driver\AnnotationDriver</parameter>
+        <parameter key="togu.annotation.metadata_factory.class">Metadata\MetadataFactory</parameter>
+        <parameter key="togu.annotation.processor.class">Togu\AnnotationBundle\Data\AnnotationProcessor</parameter>
+        
+        <parameter key="togu.annotation.metadata_cache.class">Metadata\Cache\FileCache</parameter>
+        <parameter key="togu.annotation.cache_directory">%kernel.cache_dir%/togu_annotation</parameter>
+    </parameters>
+
+    <services>
+
+		<service id="togu.annotation.metadata.cache" class="%togu.annotation.metadata_cache.class%" public="false">
+		    <argument /><!-- the cache directory (to be set later) -->
+		</service>    
+    
+        <service id="togu.annotation.metadata.annotation_driver" class="%togu.annotation.metadata.annotation_driver.class%">
+            <argument type="service" id="annotation_reader" />
+        </service>
+        <service id="togu.annotation.metadata_factory" class="%togu.annotation.metadata_factory.class%">
+            <argument type="service" id="togu.annotation.metadata.annotation_driver" />
+		    <!-- call setCache with the new cache service: -->
+		    <call method="setCache">
+		        <argument type="service" id="togu.annotation.metadata.cache" />
+		    </call>
+        </service>
+        <service id="togu.annotation.processor" class="%togu.annotation.processor.class%">
+            <argument type="service" id="togu.annotation.metadata_factory" />
+        </service>
+        
+    </services>
+</container>

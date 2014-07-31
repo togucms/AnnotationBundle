@@ -1,2 +1,2 @@
-AnnotationBundle
+Togu CMS AnnotationBundle
 ================
