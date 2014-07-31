@@ -2,7 +2,6 @@
     "name": "togu/annotation-bundle",
     "description": "Togu Annotation Bundle",
     "require": {
-        "symfony-cmf/symfony-cmf": "1.2.*"
     },
     "license": "GPL v3",
     "authors": [
