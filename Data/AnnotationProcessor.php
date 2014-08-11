@@ -42,7 +42,9 @@ class AnnotationProcessor
 		$fields = $this->getFieldsOfType($object, $type);
 		foreach ($fields as $field) {
 			$value = $field->getValue($object);
-			$values[$value->getId()] = $value;
+			if($value) {
+				$values[$value->getId()] = $value;
+			}
 		}
 		$references = $this->getFieldsOfType($object, 'reference');
 		foreach ($references as $reference) {
@@ -70,6 +72,22 @@ class AnnotationProcessor
 				foreach ($collection as $child) {
 					$this->getAllObjects($child, $objects);
 				}
+			}
+		}
+
+		$referenceones = $this->getFieldsOfType($parent, 'referenceone');
+		foreach ($referenceones as $reference) {
+			$child = $reference->getValue($parent);
+			if($child) {
+				$this->getAllObjects($child, $objects);
+			}
+		}
+
+		$links = $this->getFieldsOfType($parent, 'link');
+		foreach ($links as $link) {
+			$child = $link->getValue($parent);
+			if($child) {
+				$objects[$child->getId()] = $child;
 			}
 		}
 	}
